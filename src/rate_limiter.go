@@ -22,7 +22,7 @@ func NewRateLimiter(interval int, count int) *RateLimiter {
 	var rateLimit time.Duration
 
 	if count > 0 {
-		rateLimit = (time.Duration(interval)*time.Millisecond) / time.Duration(count)
+		rateLimit = time.Duration(interval) * time.Millisecond
 	} else {
 		rateLimit = 0
 	}
