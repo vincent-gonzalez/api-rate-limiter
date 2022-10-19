@@ -10,3 +10,6 @@ buildRun: build run
 
 run:
 	./$(BUILD-DIR)/$(EXE-NAME)
+
+loadTest:
+	vegeta attack -duration=1s -rate=1000 -targets=vegeta.conf | vegeta report
