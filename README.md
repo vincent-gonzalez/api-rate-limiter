@@ -1,7 +1,7 @@
 # API Rate Limiter - Vincent Gonzalez
 
 ## Runtime Environment
-The minimum version of Go that is required to run this solution is `1.19`. This version is also defined in the `go.mod` file of this solution. However, I have compiled and run this solution using version `1.19.2` of Go.
+The minimum version of Go that is required to run this solution is `1.18`. This version is also defined in the `go.mod` file of this solution. However, I have compiled and run this solution using version `1.19.2` of Go.
 
 ## How to run
 A makefile has been included in the base directory. Use `make buildRun` in a terminal in the base directory to build and execute the program. Use `make build` to only compile the program. Use `make run` to run the program after it has already been compiled.
