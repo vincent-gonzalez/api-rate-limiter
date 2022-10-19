@@ -9,8 +9,8 @@ import (
 // RateLimiter limits the number of requests made to an HTTP server
 type RateLimiter struct {
 	IPConnections map[string]*Connection
-	// ConnectionLimit is the maximum number of requests that can occur per time interval
-	ConnectionLimit int
+	// RequestLimit is the maximum number of requests that can occur per time interval
+	RequestLimit int
 	// RateLimit is the time interval in which requests up to the
 	// maximum limit can occur
 	RateLimit time.Duration
@@ -29,7 +29,7 @@ func NewRateLimiter(interval int, count int) *RateLimiter {
 
 	return &RateLimiter{
 		IPConnections: make(map[string]*Connection),
-		ConnectionLimit: count,
+		RequestLimit: count,
 		RateLimit: rateLimit,
 	}
 }
@@ -59,7 +59,7 @@ func (r *RateLimiter) TrackConnection(connectionIP string) {
 	defer r.mutexLock.Unlock()
 	// don't track a connection again if it is already tracked
 	if _, hasConnection := r.IPConnections[connectionIP]; !hasConnection {
-		newLimiter := rate.NewLimiter(rate.Every(r.RateLimit), r.ConnectionLimit)
+		newLimiter := rate.NewLimiter(rate.Every(r.RateLimit), r.RequestLimit)
 		newConnection := &Connection{
 			Identifier: connectionIP,
 			Limiter: newLimiter,
