@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -31,7 +32,11 @@ func rateLimitMiddleware(next http.Handler, rateLimiter *RateLimiter) http.Handl
 func main() {
 	fmt.Println("Starting server...")
 
-	rateLimiter := NewRateLimiter(1, 1)
+	rateLimitInterval := flag.Int("rateLimit", 1, "rate limit in milliseconds")
+	requestLimit := flag.Int("requestLimit", 1, "max number of requests per rate interval")
+	flag.Parse()
+
+	rateLimiter := NewRateLimiter(*rateLimitInterval, *requestLimit)
 	stop := rateLimiter.RunInactiveConnectionsCleanupRoutine(1, time.Minute, 2, time.Minute)
 	defer close(stop)
 

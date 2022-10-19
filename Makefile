@@ -9,7 +9,7 @@ build:
 buildRun: build run
 
 run:
-	./$(BUILD-DIR)/$(EXE-NAME)
+	./$(BUILD-DIR)/$(EXE-NAME) -rateLimit=100 -requestLimit=10
 
 loadTest:
 	vegeta attack -duration=1s -rate=1000 -targets=vegeta.conf | vegeta report
