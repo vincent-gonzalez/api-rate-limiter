@@ -40,18 +40,18 @@ func (r *RateLimiter) IsRequestAllowed(clientIP string) bool {
 	connection, hasConnection := r.IPConnections[clientIP]
 	r.mutexLock.Unlock()
 
-	if hasConnection {
-		r.mutexLock.Lock()
-		defer r.mutexLock.Unlock()
-		if !connection.Limiter.Allow() {
-			return false;
-		}
-	} else {
-		// new connection so it is implicitly allowed the first time
+	if !hasConnection {
 		r.TrackConnection(clientIP)
+		r.mutexLock.Lock()
+		connection = r.IPConnections[clientIP]
+		r.mutexLock.Unlock()
 	}
 
-	return true
+	if connection.Limiter.Allow() {
+		return true
+	}
+
+	return false
 }
 
 func (r *RateLimiter) TrackConnection(connectionIP string) {
