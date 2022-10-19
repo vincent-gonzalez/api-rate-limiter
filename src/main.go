@@ -10,12 +10,17 @@ import (
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	currentTime := struct{
-		CurrentTime string `json:"currentTime"`
-	}{
-		CurrentTime: time.Now().Format(time.RFC3339),
+	if r.Method == "GET" {
+		currentTime := struct{
+			CurrentTime string `json:"currentTime"`
+		}{
+			CurrentTime: time.Now().Format(time.RFC3339),
+		}
+
+		json.NewEncoder(w).Encode(currentTime)
+	} else {
+		http.Error(w, "Only GET request are supported", http.StatusMethodNotAllowed)
 	}
-	json.NewEncoder(w).Encode(currentTime)
 }
 
 func rateLimitMiddleware(next http.Handler, rateLimiter *RateLimiter) http.Handler {
